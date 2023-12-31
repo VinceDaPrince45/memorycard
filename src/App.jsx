@@ -1,3 +1,13 @@
+import Test from "./components/Random";
+
+export default function App() {
+    return (
+        <>
+            <Test />
+        </>
+    );
+}
+
 // gameplan
 
 // need to render an inputted amount of cards
