@@ -1,4 +1,4 @@
-import getImages from "./Images";
+import getPokemon from "./Images";
 
 function RandomizeCards(array) {
     if (array == undefined || array.length == 0) {
@@ -7,5 +7,7 @@ function RandomizeCards(array) {
 }
 
 export default function Test() {
-    getImages();
+    const pokemonArray = [];
+    getPokemon(pokemonArray); 
+    console.log(pokemonArray);
 }
