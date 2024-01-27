@@ -2,51 +2,48 @@ import getPokemon from "./Images";
 import React, { useEffect,useState } from "react";
 
 function shuffleArray(array) {
-    console.log(array.length)
-    if (array == undefined || array.length == 0) {
+    const tempArray = [...array]
+    if (tempArray == undefined || tempArray.length == 0) {
         // call function to call API and get an arbitrary number of items
-        const pokemonArray = [];
-        getPokemon(pokemonArray);
-        array = pokemonArray;
         console.log("nothing");
+        return [];
     }
     else {
-        for (var i = array.length - 1; i > 0; i--) {
+        for (var i = tempArray.length - 1; i > 0; i--) {
             var j = Math.floor(Math.random() * (i + 1));
-            var temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
+            var temp = tempArray[i];
+            tempArray[i] = tempArray[j];
+            tempArray[j] = temp;
         }
-        console.log("shuffling")
+        return tempArray;
     }
-    console.log(array)
 }
 
-
 export default function Test() {
-    const [cards,setCards] = useState([1,2,3,4]);
-    const [selected,setSelected] = useState([]);
-    let lost = false;
+    const [pokemonList,setPokemonList] = useState([]);
+    const [pokemonChosen,setPokemonChosen] = useState([]);
 
-    useEffect(
-        () => {
-            // execute side effect
-            // check if chosen card is in selected
-                // if so, rerender so game is over
-                // else, add chosen card to selected ; setSelected([...chosen card]) and shuffle cards and setCards to shuffled
-            return () => {
-                // cleanup function
-                if (lost) {
-                    <div>Lost</div>
-                } else {
-                    cards.map((item) => {
-                        <div key={item}>item</div>
-                    })
-                }
+    // useEffect for mounting
+    useEffect(() => {
+        const fetchData = async () => {
+            const pokemonArray = [];
+            const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0", {mode: 'cors'});
+            const pokemonData = await response.json();
+            for (let i = 0; i < 10; i++) {
+                const randomNum = Math.floor(Math.random() * (1302 - 1 + 1) + 1) - 1;
+                pokemonArray.push(pokemonData.results[randomNum]);
             }
-        },
-        [] // dependencies
-    )
+            setPokemonList(pokemonArray);
+        }
+        fetchData().catch(console.error);
+    }, [])
+
+    return (<>
+        <button onClick={()=>{
+            console.log(pokemonList);
+            setPokemonList(shuffleArray(pokemonList));
+        }}>Display Pokemon</button>
+    </>);
 }
 // move fetch data functions into useeffect inside Test 
 // have dependencies by an array that tracks the card user clicks
