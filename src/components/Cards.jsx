@@ -31,6 +31,32 @@ function Cards({array}) {
     );
 }
 
+function Gamestate({array,chosenArray}) {
+    return (
+        (array.length==chosenArray.length)
+        ?
+        <div>You Won!</div>
+        :
+        <div>You Lost!</div>
+    );
+}
+
+function Scoreboard({array,chosenArray,gamestate}) {
+    return (
+        (gamestate)
+        ?
+        <>
+            <h1>Game Over</h1>
+            <Gamestate array={array} chosenArray={chosenArray} />
+            <div>Score: {chosenArray.length}</div>
+        </>
+        :
+        <>
+            <div>Score: {chosenArray.length}</div>
+        </>
+    );
+}
+
 export default function Test() {
     const [pokemonList,setPokemonList] = useState([]);
     const [pokemonChosen,setPokemonChosen] = useState([]);
@@ -56,7 +82,6 @@ export default function Test() {
         // function to detect which card is clicked
         document.querySelector(".pokemon-list").onclick = function(e) {
             if (e.target.className == "pokemon") {
-                console.log(e.target.id);
                 if (!pokemonChosen.includes(e.target.id)) {
                     console.log(pokemonList);
                     setPokemonChosen([...pokemonChosen,e.target.id]);
@@ -76,16 +101,13 @@ export default function Test() {
             <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
             <button onClick={()=>{console.log(pokemonChosen);}}>Display Pokemon Chosen</button>
             <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
-            <div>Score: {pokemonChosen.length}</div>
         </div>
+        <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
         <Cards array={pokemonList}/>
     </>
     :
     <>
-        <div>
-            <div>Score: {pokemonChosen.length}</div>
-            <h1>Game Over</h1>
-        </div>
+        <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
     </>
     );
 }
