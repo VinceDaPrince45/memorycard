@@ -18,12 +18,11 @@ function shuffleArray(array) {
     }
 }
 
-function Cards({array,score}) {
+function Cards({array}) {
     const pokemonList = array.map((pokemon) => <img src={pokemon.img} key={pokemon.number} className="pokemon" id={pokemon.number}/>)
     return (
     <>
         <div className="pokemon-list">
-            <h1>Score: {score}</h1>
             <ul>
                 {pokemonList}
             </ul>
@@ -41,7 +40,7 @@ export default function Test() {
         const fetchData = async () => {
             const pokemonArray = [];
             const url = "https://pokeapi.co/api/v2/pokemon/";
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 10; i++) { // need to add check so that there r no duplicate pokemon
                 const randomNum = Math.floor(Math.random() * (1025 - 1) + 1);
                 const pokemonLink = url + randomNum;
                 const response = await fetch(pokemonLink, {mode: 'cors'});
@@ -58,17 +57,39 @@ export default function Test() {
         document.querySelector(".pokemon-list").onclick = function(e) {
             if (e.target.className == "pokemon") {
                 console.log(e.target.id);
+                if (!pokemonChosen.includes(e.target.id)) {
+                    console.log("added");
+                    console.log(pokemonList);
+                    setPokemonChosen([...pokemonChosen,e.target.id]);
+                    shuffleArray(pokemonList);
+                    // setPokemonList(shuffleArray(pokemonList));
+                } else {
+                    setGameover(true);
+                }
             }
         }
     }, [pokemonChosen]);
 
-    return (<>
-    <div>
-        <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
-        <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
-    </div>
-    <Cards array={pokemonList} score={pokemonChosen.length}/>
-    </>);
+    return (
+    (!gameover)
+    ?
+    <>
+        <div>
+            <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
+            <button onClick={()=>{console.log(pokemonChosen);}}>Display Pokemon Chosen</button>
+            <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
+            <div>Score: {pokemonChosen.length}</div>
+        </div>
+        <Cards array={pokemonList}/>
+    </>
+    :
+    <>
+        <div>
+            <div>Score: {pokemonChosen.length}</div>
+            <h1>Game Over</h1>
+        </div>
+    </>
+    );
 }
 
 // move fetch data functions into useeffect inside Test 
