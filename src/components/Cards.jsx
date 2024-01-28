@@ -80,6 +80,9 @@ export default function Test() {
 
     useEffect(() => {
         // function to detect which card is clicked
+        if (pokemonList.length == pokemonChosen.length && pokemonChosen.length != 0) {
+            setGameover(true);
+        }
         document.querySelector(".pokemon-list").onclick = function(e) {
             if (e.target.className == "pokemon") {
                 if (!pokemonChosen.includes(e.target.id)) {
