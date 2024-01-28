@@ -58,17 +58,15 @@ export default function Test() {
             if (e.target.className == "pokemon") {
                 console.log(e.target.id);
                 if (!pokemonChosen.includes(e.target.id)) {
-                    console.log("added");
                     console.log(pokemonList);
                     setPokemonChosen([...pokemonChosen,e.target.id]);
-                    shuffleArray(pokemonList);
-                    // setPokemonList(shuffleArray(pokemonList));
+                    setPokemonList(shuffleArray(pokemonList));
                 } else {
                     setGameover(true);
                 }
             }
         }
-    }, [pokemonChosen]);
+    }, [pokemonChosen,pokemonList]);
 
     return (
     (!gameover)
