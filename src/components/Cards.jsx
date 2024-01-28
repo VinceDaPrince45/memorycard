@@ -18,12 +18,12 @@ function shuffleArray(array) {
     }
 }
 
-function Cards({array}) {
-    const pokemonList = array.map((pokemon) => <img src={pokemon.img} key={pokemon.number} className="pokemon"/>)
+function Cards({array,score}) {
+    const pokemonList = array.map((pokemon) => <img src={pokemon.img} key={pokemon.number} className="pokemon" id={pokemon.number}/>)
     return (
     <>
-        <div>
-            <h1>Pokemon:</h1>
+        <div className="pokemon-list">
+            <h1>Score: {score}</h1>
             <ul>
                 {pokemonList}
             </ul>
@@ -35,21 +35,8 @@ function Cards({array}) {
 export default function Test() {
     const [pokemonList,setPokemonList] = useState([]);
     const [pokemonChosen,setPokemonChosen] = useState([]);
+    const [gameover,setGameover] = useState(false);
 
-    // useEffect for mounting
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const pokemonArray = [];
-    //         const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0", {mode: 'cors'});
-    //         const pokemonData = await response.json();
-    //         for (let i = 0; i < 10; i++) {
-    //             const randomNum = Math.floor(Math.random() * (1302 - 1 + 1) + 1) - 1;
-    //             pokemonArray.push(pokemonData.results[randomNum]);
-    //         }
-    //         setPokemonList(pokemonArray);
-    //     }
-    //     fetchData().catch(console.error);
-    // }, []);
     useEffect(() => {
         const fetchData = async () => {
             const pokemonArray = [];
@@ -66,12 +53,21 @@ export default function Test() {
         fetchData().catch(console.error);
     }, []);
 
+    useEffect(() => {
+        // function to detect which card is clicked
+        document.querySelector(".pokemon-list").onclick = function(e) {
+            if (e.target.className == "pokemon") {
+                console.log(e.target.id);
+            }
+        }
+    }, [pokemonChosen]);
+
     return (<>
     <div>
         <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
         <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
     </div>
-    <Cards array={pokemonList} />
+    <Cards array={pokemonList} score={pokemonChosen.length}/>
     </>);
 }
 
