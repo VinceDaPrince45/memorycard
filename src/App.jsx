@@ -1,4 +1,4 @@
-import Test from "./components/Random";
+import Test from "./components/Cards";
 
 export default function App() {
     return (

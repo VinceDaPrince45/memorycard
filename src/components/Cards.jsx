@@ -1,4 +1,3 @@
-import getPokemon from "./Images";
 import React, { useEffect,useState } from "react";
 
 function shuffleArray(array) {
@@ -17,6 +16,20 @@ function shuffleArray(array) {
         }
         return tempArray;
     }
+}
+
+function Cards({array}) {
+    const pokemonList = array.map((pokemon) => <li key={pokemon.name} className="pokemon">{pokemon.name}</li>)
+    return (
+    <>
+        <div>
+            <h1>Pokemon:</h1>
+            <ul>
+                {pokemonList}
+            </ul>
+        </div>
+    </>
+    );
 }
 
 export default function Test() {
@@ -39,12 +52,14 @@ export default function Test() {
     }, [])
 
     return (<>
-        <button onClick={()=>{
-            console.log(pokemonList);
-            setPokemonList(shuffleArray(pokemonList));
-        }}>Display Pokemon</button>
+    <div>
+        <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
+        <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
+    </div>
+    <Cards array={pokemonList}/>
     </>);
 }
+
 // move fetch data functions into useeffect inside Test 
 // have dependencies by an array that tracks the card user clicks
 // on first render useeffect will fetch data and setstate so that it rerenders new cards
