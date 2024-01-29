@@ -4,7 +4,6 @@ function shuffleArray(array) {
     const tempArray = [...array]
     if (tempArray == undefined || tempArray.length == 0) {
         // call function to call API and get an arbitrary number of items
-        console.log("nothing");
         return [];
     }
     else {
@@ -19,13 +18,17 @@ function shuffleArray(array) {
 }
 
 function Cards({array}) {
-    const pokemonList = array.map((pokemon) => <img src={pokemon.img} key={pokemon.number} className="pokemon" id={pokemon.number}/>)
+    const pokemonList = array.map((pokemon) => 
+        <div className="pokemon-card" key={pokemon.number}>
+            <img src={pokemon.img} className="pokemon"  id={pokemon.number}/>
+            <div className="styler-box"></div>
+        </div>
+    );
+
     return (
     <>
         <div className="pokemon-list">
-            <ul>
-                {pokemonList}
-            </ul>
+            {pokemonList}
         </div>
     </>
     );
@@ -66,12 +69,22 @@ export default function Test() {
         const fetchData = async () => {
             const pokemonArray = [];
             const url = "https://pokeapi.co/api/v2/pokemon/";
-            for (let i = 0; i < 10; i++) { // need to add check so that there r no duplicate pokemon
+            while (pokemonArray.length < 10) { // need to add check so that there r no duplicate pokemon
                 const randomNum = Math.floor(Math.random() * (1025 - 1) + 1);
+                let duplicate = false;
+                for (let i = 0; i < pokemonArray.length; i++) {
+                    if (pokemonArray[i].number == randomNum) {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (duplicate) {
+                    continue;
+                }
                 const pokemonLink = url + randomNum;
                 const response = await fetch(pokemonLink, {mode: 'cors'});
                 const pokemonData = await response.json();
-                pokemonArray.push({number:randomNum,img:pokemonData.sprites.front_default});
+                pokemonArray.push({name:pokemonData.name,number:randomNum,img:pokemonData.sprites.front_default});
             }
             setPokemonList(pokemonArray);
         }
@@ -86,7 +99,6 @@ export default function Test() {
         document.querySelector(".pokemon-list").onclick = function(e) {
             if (e.target.className == "pokemon") {
                 if (!pokemonChosen.includes(e.target.id)) {
-                    console.log(pokemonList);
                     setPokemonChosen([...pokemonChosen,e.target.id]);
                     setPokemonList(shuffleArray(pokemonList));
                 } else {
@@ -96,15 +108,11 @@ export default function Test() {
         }
     }, [pokemonChosen,pokemonList]);
 
+
     return (
     (!gameover)
     ?
     <>
-        <div>
-            <button onClick={()=>{console.log(pokemonList);}}>Display Pokemon</button>
-            <button onClick={()=>{console.log(pokemonChosen);}}>Display Pokemon Chosen</button>
-            <button onClick={()=>{setPokemonList(shuffleArray(pokemonList));}}>Shuffle Pokemon</button>
-        </div>
         <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
         <Cards array={pokemonList}/>
     </>

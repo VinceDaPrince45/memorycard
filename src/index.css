@@ -1,0 +1,17 @@
+body,#root {
+    background-image: url("./assets/c126a208-47bb-45c5-bba3-86c68c0969fd_scaled.jpg");
+    height:100vh;
+}
+
+.pokemon-list {
+    display:grid;
+    gap: 1vw;
+    grid-template-columns: repeat(auto-fill,minmax(150px,1fr));
+}
+
+.pokemon-card {
+    border: 2px solid black;
+    width:auto;
+    aspect-ratio: 1/1.414;
+    margin:auto;
+}
