@@ -21,7 +21,7 @@ function Cards({array}) {
     const pokemonList = array.map((pokemon) => 
         <div className="pokemon-card" key={pokemon.number}>
             <img src={pokemon.img} className="pokemon"  id={pokemon.number}/>
-            <div className="styler-box"></div>
+            <div className="styler-box">{pokemon.name}</div>
         </div>
     );
 
@@ -112,13 +112,17 @@ export default function Test() {
     return (
     (!gameover)
     ?
-    <>
-        <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
+    <>  
+        <div className="scoreboard">
+            <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
+        </div>
         <Cards array={pokemonList}/>
     </>
     :
     <>
-        <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
+        <div className="scoreboard">
+            <Scoreboard array={pokemonList} chosenArray={pokemonChosen} gamestate={gameover}/>
+        </div>
     </>
     );
 }
